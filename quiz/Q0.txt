@@ -16,3 +16,42 @@
 
 What is happening in the background?
 
+	Keyboard senses keys pressed - issues an interrupt to
+		USB or PS2 interface to Northbridge chipset
+	
+	This interrupt is relayed to processor.
+
+	Processor recognizes context of "web browser" and relays
+		key sequence to browser (Chrome, Safari, IE, etc.)
+
+	Browser interprets html text as an entry and recognizes 
+		a form has been completed.
+
+	Browser causes CPU to look in hard drive - is the information cached?
+	Hard drive is accessed through PCIe bus.
+
+	if info not cached, send a message via TCP/IP via ethernet or 
+		wifi network card.
+
+		if ethernet, goes out through ethernet cable.
+		if wifi - to wifi router.
+
+	Info is packetized and sent to modem: 
+		to adsl or cable or access router or switch.
+
+	Packets travel through wifi network or cable / phone to ISP.
+
+	Packets leave ISP to travel through backbone (eg. SONET.)
+
+	At DNS server, if information is cached here, reverse route back to 
+		user's host system.
+
+	A human may power-cycle the data center, in which case data is 
+		temporarily held and re-transmitted from last upstream 
+		node.
+
+	At Google server, the requested data gets hashed and database is 
+		searched until matches are found.
+
+	Matching site hits are bundled and transmitted in reverse direction to 
+		user's PC.
