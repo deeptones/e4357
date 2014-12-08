@@ -3,39 +3,52 @@ BEGIN
 1. What is the _mask value for LED1? 
    What is the address of FIOSET?
 
+   LED1 on the mbed board is tied to port1 bit 18.  
+   LED1/2/3/4 are bits 18, 20, 21 and 23 of port 1.
+   To control access to bit 18 the FIOMASK register can be used.
+   The relevant one is FIO1MASK2 at address 0x2009 C032.  
+   The mask value for this byte pins [23:16] is 11111011 since a 0 in bit 18
+   means that only bit 18 is controllable by FIOSET, FIOCLR and FIOPIN 
+   registers.
 
-
+   The relevant byte-sized memory address for FIOSET is for port1 bits23:16
+   is FIO1SET2 (since the pins are byte 2.)
+   Per page 134 of the LPC1768 user-manual, the address of FIO1SET2 is
+   0x2009 C03A.
 
 
 --------------------------------------------------------------------
 2. What is the RS232 Frame?
+	An RS232 frame is a bit sequence that defines a transmitted 8-bit byte.
+	It is defined by one or more start bits, one or more stop bits
+	and baud-rate and possible parity bit.  
 
-
-
+	In the mbed, the RS232 default setup is idle-high 
+	with the initial bit going low for one bit period, then beginning
+	the 8-bit sequence, followed by 1 stop bit at 9600 bits/sec.
 
 
 --------------------------------------------------------------------
 3. Explain the start and stop conditions of i2c?
-
-
-
-
+	The start condition of I2C is the SDA pin being pulled high to low 
+	during a high SCL clock level.  The stop condition of I2C is 
+	(by contrast) a low-to-high transition of SDA while SCL is high.
 
 
 --------------------------------------------------------------------
 4. Is the i2c acknowledge SDA LOW or SDA HIGH?
-
-
-
-
+	The acknowledge bit is a low-level bit due to the receiving device
+	pulling the line low.
 
 
 --------------------------------------------------------------------
 5. Tell me about the DDR3 write leveling Concept in one sentence.  
    (ref: slides)
 
+   DDR3 write leveling is a technology that allows a DDR3 memory controller 
+   to determine and program a delay value of DQS strobe signals to match its
+   supplied DQS strobe with each memory bank's uniquely delayed clock signal
+   to achieve better timing integrity and ease board routing requirements 
+   for command/CLK/ADDR signals to memory banks using easier "fly-by-routing."
 
-
-
-
-END
+   
