@@ -6,16 +6,20 @@ Q1: Is there any compile error with the following code (if any)?
 	3[Arr] = 7; 
  
 Explain:
-
-
+   Yes, the 2nd line is garbage.  It should read:
+   Arr[3]=7;
 
 
 --------------------------------------------------------------------
 Q2: What is the difference between the following 3 statements? 
 
 const int * px; 
+	This is a pointer to a constant integer.
 int const * px; 
+	This is also a pointer to a constant integer.
 int * const px; 
+	This is a constant pointer to an integer.  Its location (memory address)
+	can't be changed, but its value can be changed.
 
 Is there any compile error for the following cases?
 case1: 
@@ -34,16 +38,14 @@ int * const px;
 px = & x; 
 
 Explain:
+	Case 1 wouldn't cause an error, since the pointer is not constant, just			its value is constant.
 
+	Case 2 is the same situation, since the memory location px is allowed
+		to change, just not its value.
 
-
-
-
-
-
-
-
-
+	Case 3 is not allowed since the pointer location is declared as 
+		constant and may not be reassigned as indicated in:
+			px = &x;
 
 
 --------------------------------------------------------------------
@@ -51,20 +53,27 @@ Q3: Write a function to set or clear ith bit of a 32-bit register.
 	Where ith (0-based) := {0, 1, 2, …, 31 } 
 void reg_set(volatile unsigned int * pReg, int ith) 
 { 
-
-
-
-
-
+	
+    // Unsigned int is a 4-byte word.  
+    // Therefore ith can be max of 4*8 - 1 - 1 = 30.  ith > 31 is disallowed.
+    if (ith < 31) {
+        int shift = (1 << ith);   // Shift 1 into the ith position.
+        *pReg |= shift;
+    } else {
+        printf("Warning!  Not enough bits in unsigned int to be able to set the %d bit!!\n", ith);
+    }
 } 
 
 void reg_clear(volatile unsigned int * pReg, int ith) 
 { 
-
-
-
-
-
+    // Unsigned int is a 4-byte word.  
+    // Therefore ith can be max of 4*8 - 1 - 1 = 30.  ith > 31 is disallowed.
+    if (ith < 31) {
+        int shift = (1 << ith);   // Shift 1 into the ith position.
+        *pReg &= (~shift);
+    } else {
+        printf("Warning!  Not enough bits in unsigned int to be able to clear the %d bit!!\n", ith);
+    }
 } 
 
 
@@ -72,13 +81,9 @@ void reg_clear(volatile unsigned int * pReg, int ith)
 --------------------------------------------------------------------
 Q4: Write a swap function in C.
 void swap(unsigned int * px, unsigned int *py) { 
-
-
-
-
-
-
-
+	unsigned int temp = *px;
+	*px = *py;
+	*py = temp;
 } 
 
 --------------------------------------------------------------------
@@ -89,6 +94,11 @@ unsigned int a0 = (unsigned int) &Arr[0];
 unsigned int a3 = (unsigned int) &Arr[3]; 
 printf(“%d\n”, a3 – a0); 
 
+&Arr[1] = 4 + &Arr[0].  Similarly &Arr[2] = 8 + &Arr[0] 
+and &Arr[3] = 12 + &Arr[0].
+
+Therefore a3 - a0 = 12 and the output is:
+12
 
 
 
