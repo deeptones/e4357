@@ -1,36 +1,64 @@
 BEGIN
 --------------------------------------------------------------------
 Q1: Implement the following inline functions: 
-inline int CircularBufferIsFull(CircularBuffer* que) 
-inline int CircularBufferIsEmpty(CircularBuffer* que) 
+inline int CircularBufferIsFull(CircularBuffer* que) {
+	// If write pointer is pointing to last empty space, que is full
+	if  ( (((que->writePointer) + 1) & (que->mask)) == que->readPointer) {
+		return 1;
+	}
+	return 0;
+}
+
+
+inline int CircularBufferIsEmpty(CircularBuffer* que) {
+	// If write pointer and read pointer point to same space, que is empty.
+	if (que->writePointer == que->readPointer) {
+		return 1;
+	}
+	return 0;
+}
+
+This was done as homework 6 but reproduced above.
 
 
 
 
 --------------------------------------------------------------------
 Q2: How to compute "Interrupt Latency"?
+	Interrupt latency is the time between issuing an interrupt command
+	and responding to the interrupt by beginnign execution of the 
+	associated ISR.
 
+	In our text "Fast and Effective Embedded Systems Design" latency 
+	is measured as the time difference between an applied rising edge
+	on an interrupt signal and an LED output that is part of the ISR.
 
 
 --------------------------------------------------------------------
 Q3: Serial pc(USBTX, USBRX); // tx, rx 
     What API (function) do you use to change the baud rate?
+    pc.baud
+    (for instance pc.baud(9600) sets the serial port's baud rate to 9600 b/s.)
 
 
 
 
 --------------------------------------------------------------------
 Q4: How many bit(s) does TDO have? Is TDO an input or output type? (Ref: JTAG Pins) 
-
-
-
-
+	TDO is the single bit output from the JTAG standard.
 
 
 --------------------------------------------------------------------
 Q5:
 What is the address of ledArr[0]? 
+	ledArr[0] is the first element of ledArr[] which is to say 
+	DigitalOut(LED1).  This has an address of port 1 byte 2 bit 18
+	and it is the third bit 
+	of the address:  0x2009C036 // bits 16-23 of port 1.
+
 What is the address of ch? 
+	ch is a declared int variable and its address can be referred to as:
+	&ch
 
 
 /* 
